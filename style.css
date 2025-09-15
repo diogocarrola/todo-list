@@ -1,0 +1,3 @@
+.todo-item.low { border-left: 5px solid green; }
+.todo-item.medium { border-left: 5px solid orange; }
+.todo-item.high { border-left: 5px solid red; }
