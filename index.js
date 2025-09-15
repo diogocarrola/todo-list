@@ -3,7 +3,17 @@ import Todo from './todo.js';
 import { saveProjects, loadProjects } from './storage.js';
 import { renderProjects, renderTodos } from './dom.js';
 
-let projects = loadProjects();
+let projects = loadProjects().map(projectObj => {
+  const project = new Project(projectObj.name);
+  project.id = projectObj.id;
+  project.todos = projectObj.todos.map(todoObj => {
+    const todo = new Todo(todoObj.title, todoObj.description, todoObj.dueDate, todoObj.priority);
+    todo.completed = todoObj.completed;
+    todo.id = todoObj.id;
+    return todo;
+  });
+  return project;
+});
 if (projects.length === 0) {
   // Initialize with a default project if none exist
   const defaultProject = new Project('Default Project');
