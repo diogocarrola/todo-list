@@ -71,9 +71,19 @@ export function renderTodos(todos, onTodoToggle, onTodoDelete, onAddTodo) {
     deleteBtn.textContent = 'Delete';
     deleteBtn.addEventListener('click', () => onTodoDelete(todo.id));
 
+    const expandBtn = document.createElement('button');
+    expandBtn.textContent = 'Details';
+    expandBtn.addEventListener('click', () => {
+      alert(
+        `Title: ${todo.title}\nDescription: ${todo.description}\nDue: ${todo.dueDate}\nPriority: ${todo.priority}\nCompleted: ${todo.completed ? 'Yes' : 'No'}`
+      );
+      // Replace alert with a modal/edit form for a better UX
+    });
+
     todoElement.appendChild(checkbox);
     todoElement.appendChild(title);
     todoElement.appendChild(deleteBtn);
+    todoElement.appendChild(expandBtn);
 
     todosContainer.appendChild(todoElement);
   });
