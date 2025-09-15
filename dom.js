@@ -55,6 +55,7 @@ export function renderTodos(todos, onTodoToggle, onTodoDelete, onAddTodo) {
     const todoElement = document.createElement('div');
     todoElement.classList.add('todo-item');
     todoElement.dataset.todoId = todo.id;
+    todoElement.classList.add(todo.priority);
 
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
