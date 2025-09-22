@@ -1,3 +1,12 @@
 .todo-item.low { border-left: 5px solid green; }
 .todo-item.medium { border-left: 5px solid orange; }
 .todo-item.high { border-left: 5px solid red; }
+
+.modal {
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center;
+  z-index: 1000;
+}
+.modal-content {
+  background: #fff; padding: 2em; border-radius: 8px; min-width: 300px;
+}
