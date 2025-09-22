@@ -2,6 +2,11 @@
 .todo-item.medium { border-left: 5px solid orange; }
 .todo-item.high { border-left: 5px solid red; }
 
+.todo-item.completed {
+  background: #eee;
+  color: #888;
+}
+
 .modal {
   position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
   background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center;
