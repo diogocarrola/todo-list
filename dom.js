@@ -75,10 +75,13 @@ export function renderTodos(todos, onTodoToggle, onTodoDelete, onAddTodo) {
     const expandBtn = document.createElement('button');
     expandBtn.textContent = 'Details';
     expandBtn.addEventListener('click', () => {
-      alert(
-        `Title: ${todo.title}\nDescription: ${todo.description}\nDue: ${todo.dueDate}\nPriority: ${todo.priority}\nCompleted: ${todo.completed ? 'Yes' : 'No'}`
-      );
-      // Replace alert with a modal/edit form for a better UX
+      showEditModal(todo, (updated) => {
+        todo.title = updated.title;
+        todo.description = updated.description;
+        todo.dueDate = updated.dueDate;
+        todo.priority = updated.priority;
+        onTodoToggle(todo.id); // re-render and save
+      });
     });
 
     todoElement.appendChild(checkbox);
@@ -150,4 +153,40 @@ export function renderTodos(todos, onTodoToggle, onTodoDelete, onAddTodo) {
   todosContainer.appendChild(addTodoForm);
 
   return todosContainer;
+}
+
+function showEditModal(todo, onSave) {
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+
+  modal.innerHTML = `
+    <div class="modal-content">
+      <h3>Edit Todo</h3>
+      <label>Title: <input type="text" id="edit-title" value="${todo.title}"></label><br>
+      <label>Description: <input type="text" id="edit-desc" value="${todo.description}"></label><br>
+      <label>Due Date: <input type="date" id="edit-date" value="${todo.dueDate}"></label><br>
+      <label>Priority:
+        <select id="edit-priority">
+          <option value="low" ${todo.priority === 'low' ? 'selected' : ''}>Low</option>
+          <option value="medium" ${todo.priority === 'medium' ? 'selected' : ''}>Medium</option>
+          <option value="high" ${todo.priority === 'high' ? 'selected' : ''}>High</option>
+        </select>
+      </label><br>
+      <button id="save-edit">Save</button>
+      <button id="close-modal">Cancel</button>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  modal.querySelector('#close-modal').onclick = () => modal.remove();
+  modal.querySelector('#save-edit').onclick = () => {
+    onSave({
+      title: modal.querySelector('#edit-title').value,
+      description: modal.querySelector('#edit-desc').value,
+      dueDate: modal.querySelector('#edit-date').value,
+      priority: modal.querySelector('#edit-priority').value,
+    });
+    modal.remove();
+  };
 }
