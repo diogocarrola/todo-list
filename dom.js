@@ -65,6 +65,7 @@ export function renderTodos(todos, onTodoToggle, onTodoDelete, onAddTodo) {
     const title = document.createElement('span');
     title.textContent = `${todo.title} (Due: ${todo.dueDate}) [${todo.priority}]`;
     if (todo.completed) {
+      todoElement.classList.add('completed');
       title.style.textDecoration = 'line-through';
     }
 
