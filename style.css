@@ -15,3 +15,14 @@
 .modal-content {
   background: #fff; padding: 2em; border-radius: 8px; min-width: 300px;
 }
+
+@media (max-width: 600px) {
+  #app, .modal-content {
+    width: 95vw;
+    font-size: 1em;
+  }
+  .todo-item, .project-item {
+    font-size: 1em;
+    padding: 0.5em;
+  }
+}
