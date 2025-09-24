@@ -3,13 +3,16 @@ import Todo from './todo.js';
 
 const appContainer = document.getElementById('app');
 
-export function renderProjects(projects, onProjectSelect, onAddProject) {
+export function renderProjects(projects, onProjectSelect, onAddProject, currentProjectId) {
   const projectsContainer = document.createElement('div');
   projectsContainer.id = 'projects-container';
 
   projects.forEach(project => {
     const projectElement = document.createElement('div');
     projectElement.classList.add('project-item');
+    if (project.id === currentProjectId) {
+      projectElement.classList.add('active');
+    }
     projectElement.textContent = project.name;
     projectElement.dataset.projectId = project.id;
     projectElement.addEventListener('click', () => onProjectSelect(project.id));

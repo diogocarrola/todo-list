@@ -59,8 +59,8 @@ function onTodoDelete(todoId) {
 function renderApp() {
   appContainer.innerHTML = '';
 
-  // Render projects list
-  const projectsElement = renderProjects(projects, onProjectSelect, onAddProject);
+  // Render current project list
+  const projectsElement = renderProjects(projects, onProjectSelect, onAddProject, currentProjectId);
   appContainer.appendChild(projectsElement);
 
   // Render todos for current project
