@@ -1,10 +1,10 @@
 # todo-list
 
-The Odin Project - Todo List
+## The Odin Project - Todo List
 
 A clean, modular todo list app built with modern JavaScript and CSS. Organize your tasks into projects, set priorities and keep track of due dates, all with persistent local storage.
 
-## Features
+### Features
 
 - **Project Organization:** Group todos into separate projects.
 - **Dynamic Todos:** Add, delete, and mark todos as complete.
@@ -15,7 +15,7 @@ A clean, modular todo list app built with modern JavaScript and CSS. Organize yo
 - **Responsive Design:** Works on desktop and mobile.
 - **Edit Details:** Expand todos to view details (editing coming soon).
 
-## How It Works
+### How It Works
 
 - View all projects and their todos.
 - Add new projects and todos using the forms.
