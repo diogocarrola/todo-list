@@ -1,6 +1,3 @@
-import Project from './project.js';
-import Todo from './todo.js';
-
 const appContainer = document.getElementById('app');
 
 export function renderProjects(projects, onProjectSelect, onAddProject, currentProjectId) {
@@ -50,7 +47,7 @@ export function renderProjects(projects, onProjectSelect, onAddProject, currentP
   return projectsContainer;
 }
 
-export function renderTodos(todos, onTodoToggle, onTodoDelete, onAddTodo) {
+export function renderTodos(todos, onTodoToggle, onTodoDelete, onTodoEdit, onAddTodo) {
   const todosContainer = document.createElement('div');
   todosContainer.id = 'todos-container';
 
@@ -80,11 +77,9 @@ export function renderTodos(todos, onTodoToggle, onTodoDelete, onAddTodo) {
     expandBtn.textContent = 'Details';
     expandBtn.addEventListener('click', () => {
       showEditModal(todo, (updated) => {
-        todo.title = updated.title;
-        todo.description = updated.description;
-        todo.dueDate = updated.dueDate;
-        todo.priority = updated.priority;
-        onTodoToggle(todo.id); // re-render and save
+        if (typeof onTodoEdit === 'function') {
+          onTodoEdit(todo.id, updated);
+        }
       });
     });
 
