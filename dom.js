@@ -85,6 +85,9 @@ export function renderTodos(todos, onTodoToggle, onTodoDelete, onTodoEdit, onAdd
 
     todoElement.appendChild(checkbox);
     todoElement.appendChild(title);
+    // timeline indicator
+    const timeline = createTimelineIndicator(todo.dueDate, todo.priority);
+    todoElement.appendChild(timeline);
     todoElement.appendChild(deleteBtn);
     todoElement.appendChild(expandBtn);
 
@@ -152,6 +155,44 @@ export function renderTodos(todos, onTodoToggle, onTodoDelete, onTodoEdit, onAdd
   todosContainer.appendChild(addTodoForm);
 
   return todosContainer;
+}
+
+export function createTimelineIndicator(dueDateValue, priority) {
+  const wrap = document.createElement('div');
+  wrap.className = 'timeline-indicator';
+
+  // normalize dueDate
+  const due = dueDateValue ? new Date(dueDateValue) : null;
+  if (!due || Number.isNaN(due.getTime())) {
+    wrap.textContent = 'No due date';
+    wrap.style.opacity = '0.6';
+    return wrap;
+  }
+
+  const now = new Date();
+  const diffMs = due - now;
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+
+  let label = '';
+  if (diffMs < 0) {
+    label = 'Overdue';
+    wrap.classList.add('overdue');
+    const badge = document.createElement('span');
+    badge.className = 'overdue-badge';
+    badge.textContent = 'OVERDUE';
+    wrap.appendChild(badge);
+    return wrap;
+  }
+
+  if (diffDays >= 1) label = `${diffDays}d left`;
+  else if (diffHours >= 1) label = `${diffHours}h left`;
+  else label = 'Less than 1h';
+
+  const text = document.createElement('span');
+  text.textContent = label;
+  wrap.appendChild(text);
+  return wrap;
 }
 
 function showEditModal(todo, onSave) {
