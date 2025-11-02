@@ -2,6 +2,7 @@ import Project from './project.js';
 import Todo from './todo.js';
 import { saveProjects, loadProjects } from './storage.js';
 import { renderProjects, renderTodos } from './dom.js';
+import MotivationManager from './motivation.js';
 
 let projects = loadProjects().map(projectObj => {
   const project = new Project(projectObj.name);
@@ -24,6 +25,7 @@ if (projects.length === 0) {
 let currentProjectId = projects[0].id;
 
 const appContainer = document.getElementById('app');
+const motivationManager = new MotivationManager();
 
 function onProjectSelect(projectId) {
   currentProjectId = projectId;
@@ -46,12 +48,30 @@ function onTodoToggle(todoId) {
   todo.completed = !todo.completed;
   saveProjects(projects);
   renderApp();
+
+  if (todo.completed) {
+    motivationManager.showMotivationNotification(`Nice — completed: ${todo.title}`);
+  }
 }
 
 function onTodoDelete(todoId) {
   const project = projects.find(p => p.id === currentProjectId);
   if (!project) return;
   project.todos = project.todos.filter(t => t.id !== todoId);
+  saveProjects(projects);
+  renderApp();
+}
+
+function onTodoEdit(todoId, updated) {
+  const project = projects.find(p => p.id === currentProjectId);
+  if (!project) return;
+  const todo = project.todos.find(t => t.id === todoId);
+  if (!todo) return;
+  todo.title = updated.title;
+  todo.description = updated.description;
+  todo.dueDate = updated.dueDate;
+  todo.priority = updated.priority;
+  // Keep `completed` unchanged
   saveProjects(projects);
   renderApp();
 }
@@ -66,7 +86,7 @@ function renderApp() {
   // Render todos for current project
   const project = projects.find(p => p.id === currentProjectId);
   if (project) {
-    const todosElement = renderTodos(project.todos, onTodoToggle, onTodoDelete, onAddTodo);
+    const todosElement = renderTodos(project.todos, onTodoToggle, onTodoDelete, onTodoEdit, onAddTodo);
     appContainer.appendChild(todosElement);
   }
 }
@@ -78,6 +98,11 @@ function onAddTodo(todoData) {
   project.addTodo(newTodo);
   saveProjects(projects);
   renderApp();
+  if (newTodo.priority === 'high') {
+    motivationManager.showMotivationNotification(`Heads up — high priority: ${newTodo.title}`);
+  }
 }
 
 renderApp();
+// start a gentle periodic water reminder (user can change this later)
+motivationManager.startWaterReminders(120); // remind every 120 minutes by default
