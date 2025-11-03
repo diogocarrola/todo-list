@@ -169,30 +169,56 @@ export function renderTodos(todos, onTodoToggle, onTodoDelete, onTodoEdit, onAdd
     todosContainer.appendChild(todoElement);
   });
 
-  // Add new todo form
+  // Add new todo form (structured for KITT styling)
   const addTodoForm = document.createElement('form');
   addTodoForm.id = 'add-todo-form';
+  addTodoForm.className = 'add-todo-form';
 
-  // Title input
+  const formGrid = document.createElement('div');
+  formGrid.className = 'form-grid';
+
+  // Title group
+  const titleGroup = document.createElement('div');
+  titleGroup.className = 'form-group';
+  const titleLabel = document.createElement('label');
+  titleLabel.textContent = 'Title';
   const titleInput = document.createElement('input');
   titleInput.type = 'text';
-  titleInput.placeholder = 'Title';
+  titleInput.placeholder = 'Mission Title';
   titleInput.name = 'title';
   titleInput.required = true;
+  titleGroup.appendChild(titleLabel);
+  titleGroup.appendChild(titleInput);
 
-  // Description input
+  // Description group
+  const descGroup = document.createElement('div');
+  descGroup.className = 'form-group';
+  const descLabel = document.createElement('label');
+  descLabel.textContent = 'Description';
   const descriptionInput = document.createElement('input');
   descriptionInput.type = 'text';
-  descriptionInput.placeholder = 'Description';
+  descriptionInput.placeholder = 'Short description';
   descriptionInput.name = 'description';
+  descGroup.appendChild(descLabel);
+  descGroup.appendChild(descriptionInput);
 
-  // Due date input
+  // Due date group
+  const dateGroup = document.createElement('div');
+  dateGroup.className = 'form-group';
+  const dateLabel = document.createElement('label');
+  dateLabel.textContent = 'Due Date';
   const dueDateInput = document.createElement('input');
   dueDateInput.type = 'date';
   dueDateInput.name = 'dueDate';
   dueDateInput.required = true;
+  dateGroup.appendChild(dateLabel);
+  dateGroup.appendChild(dueDateInput);
 
-  // Priority select
+  // Priority group
+  const priorityGroup = document.createElement('div');
+  priorityGroup.className = 'form-group';
+  const priorityLabel = document.createElement('label');
+  priorityLabel.textContent = 'Priority';
   const prioritySelect = document.createElement('select');
   prioritySelect.name = 'priority';
   ['low', 'medium', 'high'].forEach(level => {
@@ -201,17 +227,25 @@ export function renderTodos(todos, onTodoToggle, onTodoDelete, onTodoEdit, onAdd
     option.textContent = level.charAt(0).toUpperCase() + level.slice(1);
     prioritySelect.appendChild(option);
   });
+  priorityGroup.appendChild(priorityLabel);
+  priorityGroup.appendChild(prioritySelect);
 
-  // Submit button
+  formGrid.appendChild(titleGroup);
+  formGrid.appendChild(descGroup);
+  formGrid.appendChild(dateGroup);
+  formGrid.appendChild(priorityGroup);
+
+  // Actions
+  const actions = document.createElement('div');
+  actions.className = 'form-actions';
   const addButton = document.createElement('button');
   addButton.type = 'submit';
   addButton.textContent = 'Add Todo';
+  addButton.className = 'btn-primary';
+  actions.appendChild(addButton);
 
-  addTodoForm.appendChild(titleInput);
-  addTodoForm.appendChild(descriptionInput);
-  addTodoForm.appendChild(dueDateInput);
-  addTodoForm.appendChild(prioritySelect);
-  addTodoForm.appendChild(addButton);
+  addTodoForm.appendChild(formGrid);
+  addTodoForm.appendChild(actions);
 
   addTodoForm.addEventListener('submit', (e) => {
     e.preventDefault();
