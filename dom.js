@@ -1,8 +1,10 @@
 const appContainer = document.getElementById('app');
 
-export function renderProjects(projects, onProjectSelect, onAddProject, currentProjectId) {
+export function renderProjects(projects, onProjectSelect, onAddProject, onProjectDelete, onProjectRename, currentProjectId) {
   const projectsContainer = document.createElement('div');
   projectsContainer.id = 'projects-container';
+  const projectsList = document.createElement('div');
+  projectsList.className = 'projects-list';
 
   projects.forEach(project => {
     const projectElement = document.createElement('div');
@@ -10,25 +12,62 @@ export function renderProjects(projects, onProjectSelect, onAddProject, currentP
     if (project.id === currentProjectId) {
       projectElement.classList.add('active');
     }
-    projectElement.textContent = project.name;
     projectElement.dataset.projectId = project.id;
-    projectElement.addEventListener('click', () => onProjectSelect(project.id));
-    projectsContainer.appendChild(projectElement);
+
+    const nameSpan = document.createElement('span');
+    nameSpan.className = 'project-name';
+    nameSpan.textContent = project.name;
+    nameSpan.style.cursor = 'pointer';
+    nameSpan.addEventListener('click', () => onProjectSelect(project.id));
+
+    const actionsDiv = document.createElement('div');
+    actionsDiv.className = 'project-actions';
+
+    const renameBtn = document.createElement('button');
+    renameBtn.textContent = '✏️';
+    renameBtn.className = 'btn-project-action';
+    renameBtn.title = 'Rename';
+    renameBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      showRenameProjectModal(project, onProjectRename);
+    });
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.textContent = '🗑️';
+    deleteBtn.className = 'btn-project-action';
+    deleteBtn.title = 'Delete';
+    deleteBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (confirm(`Delete project "${project.name}"?`)) {
+        onProjectDelete(project.id);
+      }
+    });
+
+    actionsDiv.appendChild(renameBtn);
+    actionsDiv.appendChild(deleteBtn);
+
+    projectElement.appendChild(nameSpan);
+    projectElement.appendChild(actionsDiv);
+    projectsList.appendChild(projectElement);
   });
+
+  projectsContainer.appendChild(projectsList);
 
   // Add new project form
   const addProjectForm = document.createElement('form');
   addProjectForm.id = 'add-project-form';
+  addProjectForm.className = 'add-project-form';
 
   const input = document.createElement('input');
   input.type = 'text';
-  input.placeholder = 'New project name';
+  input.placeholder = 'New mission';
   input.name = 'projectName';
   input.required = true;
 
   const addButton = document.createElement('button');
   addButton.type = 'submit';
-  addButton.textContent = 'Add Project';
+  addButton.textContent = 'Add Mission';
+  addButton.className = 'btn-primary';
 
   addProjectForm.appendChild(input);
   addProjectForm.appendChild(addButton);
@@ -45,6 +84,42 @@ export function renderProjects(projects, onProjectSelect, onAddProject, currentP
   projectsContainer.appendChild(addProjectForm);
 
   return projectsContainer;
+}
+
+function showRenameProjectModal(project, onRename) {
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+
+  modal.innerHTML = `
+    <div class="modal-content">
+      <h3>Rename Mission</h3>
+      <input type="text" id="rename-input" value="${project.name}" placeholder="New mission name">
+      <div class="modal-actions">
+        <button id="rename-save" class="btn-primary">Save</button>
+        <button id="rename-cancel" class="btn-secondary">Cancel</button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  const input = modal.querySelector('#rename-input');
+  input.focus();
+  input.select();
+
+  modal.querySelector('#rename-cancel').onclick = () => modal.remove();
+  modal.querySelector('#rename-save').onclick = () => {
+    const newName = input.value.trim();
+    if (newName && newName !== project.name) {
+      onRename(project.id, newName);
+    }
+    modal.remove();
+  };
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') modal.querySelector('#rename-save').click();
+    if (e.key === 'Escape') modal.remove();
+  });
 }
 
 export function renderTodos(todos, onTodoToggle, onTodoDelete, onTodoEdit, onAddTodo) {
