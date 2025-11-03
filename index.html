@@ -3,13 +3,96 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Todo List App</title>
+  <title>KITT Task Manager - Knight Industries</title>
   <link rel="stylesheet" href="./style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div id="app">
-    <!-- App will be rendered here -->
+  <!-- KITT Scanner Bar -->
+  <div class="scanner-bar" id="scanner-bar">
+    <div class="scanner-light" id="scanner-light"></div>
   </div>
+  
+  <!-- Dashboard Display -->
+  <div class="kitt-dashboard">
+    <!-- Left Status Panel -->
+    <div class="status-panel left-panel">
+      <div class="system-status">
+        <div class="status-item">
+          <span class="status-label">TURBO BOOST</span>
+          <div class="status-indicator active"></div>
+        </div>
+        <div class="status-item">
+          <span class="status-label">SURVEILLANCE</span>
+          <div class="status-indicator active"></div>
+        </div>
+        <div class="status-item">
+          <span class="status-label">AUTO CRUISE</span>
+          <div class="status-indicator"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Display -->
+    <div class="main-display" id="app">
+      <header class="display-header">
+        <h1 class="app-title">
+          <span class="kitt-text">K.I.T.T.</span>
+          <span class="subtitle">TASK MANAGEMENT SYSTEM</span>
+        </h1>
+        <div class="time-display" id="time-display">
+          <span class="digital-time" id="current-time">19:80:00</span>
+          <span class="digital-date" id="current-date">LOADING...</span>
+        </div>
+      </header>
+
+      <main class="display-content">
+        <div class="content-grid">
+          <!-- Navigation Panel -->
+          <nav class="nav-panel" id="projects-sidebar">
+            <!-- Projects will render here -->
+          </nav>
+
+          <!-- Task Display -->
+          <section class="task-display" id="todos-section">
+            <!-- Stats and tasks will render here -->
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <!-- Right Status Panel -->
+    <div class="status-panel right-panel">
+      <div class="voice-module">
+        <div class="voice-visualizer">
+          <div class="voice-bar"></div>
+          <div class="voice-bar"></div>
+          <div class="voice-bar"></div>
+          <div class="voice-bar"></div>
+          <div class="voice-bar"></div>
+        </div>
+        <span class="voice-label">VOICE MODULE ACTIVE</span>
+      </div>
+      <div class="mission-stats">
+        <div class="mission-item">
+          <span class="mission-label">ACTIVE MISSIONS</span>
+          <span class="mission-value" id="active-missions">0</span>
+        </div>
+        <div class="mission-item">
+          <span class="mission-label">CRITICAL</span>
+          <span class="mission-value" id="critical-missions">0</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KITT Voice Notification -->
+  <div class="kitt-voice" id="kitt-voice">
+    <div class="voice-message" id="voice-message">
+      "Michael, we have new missions to complete."
+    </div>
+  </div>
+
   <script type="module" src="./index.js"></script>
 </body>
 </html>
