@@ -125,47 +125,91 @@ function showRenameProjectModal(project, onRename) {
 export function renderTodos(todos, onTodoToggle, onTodoDelete, onTodoEdit, onAddTodo) {
   const todosContainer = document.createElement('div');
   todosContainer.id = 'todos-container';
-
   todos.forEach(todo => {
     const todoElement = document.createElement('div');
     todoElement.classList.add('todo-item');
     todoElement.dataset.todoId = todo.id;
     todoElement.classList.add(todo.priority);
 
+    // Row layout: checkbox | content | actions
+    const row = document.createElement('div');
+    row.className = 'todo-row';
+
+    // Checkbox
+    const cbWrap = document.createElement('div');
+    cbWrap.className = 'todo-checkbox';
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.checked = todo.completed;
     checkbox.addEventListener('change', () => onTodoToggle(todo.id));
+    cbWrap.appendChild(checkbox);
 
-    const title = document.createElement('span');
-    title.textContent = `${todo.title} (Due: ${todo.dueDate}) [${todo.priority}]`;
+    // Content (title + description + meta)
+    const content = document.createElement('div');
+    content.className = 'todo-content-compact';
+
+    const title = document.createElement('div');
+    title.className = 'todo-title';
+    title.textContent = todo.title;
     if (todo.completed) {
       todoElement.classList.add('completed');
-      title.style.textDecoration = 'line-through';
+      title.classList.add('completed');
     }
 
-    const deleteBtn = document.createElement('button');
-    deleteBtn.textContent = 'Delete';
-    deleteBtn.addEventListener('click', () => onTodoDelete(todo.id));
+    const desc = document.createElement('div');
+    desc.className = 'todo-description';
+    desc.textContent = todo.description || '';
 
-    const expandBtn = document.createElement('button');
-    expandBtn.textContent = 'Details';
-    expandBtn.addEventListener('click', () => {
+    const meta = document.createElement('div');
+    meta.className = 'todo-meta';
+    // time remaining / due date
+    const timeline = createTimelineIndicator(todo.dueDate, todo.priority);
+    meta.appendChild(timeline);
+
+    // priority badge
+    const badge = document.createElement('span');
+    badge.className = `todo-priority ${todo.priority}`;
+    badge.textContent = todo.priority ? todo.priority.toUpperCase() : '';
+    meta.appendChild(badge);
+
+    content.appendChild(title);
+    content.appendChild(desc);
+    content.appendChild(meta);
+
+    // Actions (edit, delete) using same icons as projects
+    const actions = document.createElement('div');
+    actions.className = 'todo-actions';
+
+    const editBtn = document.createElement('button');
+    editBtn.className = 'btn-project-action btn-edit';
+    editBtn.title = 'Edit';
+    editBtn.innerText = '✏️';
+    editBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
       showEditModal(todo, (updated) => {
-        if (typeof onTodoEdit === 'function') {
-          onTodoEdit(todo.id, updated);
-        }
+        if (typeof onTodoEdit === 'function') onTodoEdit(todo.id, updated);
       });
     });
 
-    todoElement.appendChild(checkbox);
-    todoElement.appendChild(title);
-    // timeline indicator
-    const timeline = createTimelineIndicator(todo.dueDate, todo.priority);
-    todoElement.appendChild(timeline);
-    todoElement.appendChild(deleteBtn);
-    todoElement.appendChild(expandBtn);
+    const delBtn = document.createElement('button');
+    delBtn.className = 'btn-project-action btn-delete';
+    delBtn.title = 'Delete';
+    delBtn.innerText = '🗑️';
+    delBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (confirm(`Delete task "${todo.title}"?`)) {
+        if (typeof onTodoDelete === 'function') onTodoDelete(todo.id);
+      }
+    });
 
+    actions.appendChild(editBtn);
+    actions.appendChild(delBtn);
+
+    row.appendChild(cbWrap);
+    row.appendChild(content);
+    row.appendChild(actions);
+
+    todoElement.appendChild(row);
     todosContainer.appendChild(todoElement);
   });
 
@@ -307,22 +351,48 @@ export function createTimelineIndicator(dueDateValue, priority) {
 function showEditModal(todo, onSave) {
   const modal = document.createElement('div');
   modal.className = 'modal';
+  // escape helper for safety in innerHTML
+  function escapeHtml(str) {
+    return String(str || '').replace(/[&"'<>]/g, function (s) {
+      return {
+        '&': '&amp;',
+        '"': '&quot;',
+        "'": '&#39;',
+        '<': '&lt;',
+        '>': '&gt;'
+      }[s];
+    });
+  }
 
   modal.innerHTML = `
     <div class="modal-content">
-      <h3>Edit Todo</h3>
-      <label>Title: <input type="text" id="edit-title" value="${todo.title}"></label><br>
-      <label>Description: <input type="text" id="edit-desc" value="${todo.description}"></label><br>
-      <label>Due Date: <input type="date" id="edit-date" value="${todo.dueDate}"></label><br>
-      <label>Priority:
-        <select id="edit-priority">
-          <option value="low" ${todo.priority === 'low' ? 'selected' : ''}>Low</option>
-          <option value="medium" ${todo.priority === 'medium' ? 'selected' : ''}>Medium</option>
-          <option value="high" ${todo.priority === 'high' ? 'selected' : ''}>High</option>
-        </select>
-      </label><br>
-      <button id="save-edit">Save</button>
-      <button id="close-modal">Cancel</button>
+      <h3>Edit Mission Task</h3>
+      <div class="form-group">
+        <label>Title</label>
+        <input type="text" id="edit-title" value="${escapeHtml(todo.title)}">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="edit-desc">${escapeHtml(todo.description || '')}</textarea>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Due Date</label>
+          <input type="date" id="edit-date" value="${todo.dueDate || ''}">
+        </div>
+        <div class="form-group">
+          <label>Priority</label>
+          <select id="edit-priority">
+            <option value="low" ${todo.priority === 'low' ? 'selected' : ''}>Low</option>
+            <option value="medium" ${todo.priority === 'medium' ? 'selected' : ''}>Medium</option>
+            <option value="high" ${todo.priority === 'high' ? 'selected' : ''}>High</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-actions" style="margin-top:1rem; display:flex; gap:0.8rem; justify-content:center;">
+        <button id="save-edit" class="btn-primary">Save</button>
+        <button id="close-modal" class="btn-secondary">Cancel</button>
+      </div>
     </div>
   `;
 
