@@ -164,7 +164,7 @@ body.turbo-mode .scanner-bar { filter: brightness(1.6) saturate(1.4); box-shadow
 .todo-checkbox { width:40px; flex:0 0 40px; display:flex; align-items:center; justify-content:center; }
 .todo-content-compact { flex:1 1 auto; min-width:0; }
 .todo-title { font-size:1rem; font-weight:700; color:#fff; line-height:1.1; margin-bottom:0.15rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.todo-description { color:rgba(255,255,255,0.85); margin-bottom:0.2rem; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis; font-size:0.95rem; }
+.todo-description { color:rgba(255,255,255,0.85); margin-bottom:0.2rem; display:-webkit-box; line-clamp:2; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis; font-size:0.95rem; }
 .todo-meta { display:flex; gap:0.6rem; font-size:0.78rem; color:rgba(255,255,255,0.7); align-items:center; }
 .todo-actions { flex:0 0 auto; display:flex; gap:0.4rem; align-items:center; }
 .btn-project-action { background:none; border:none; color:#fff; cursor:pointer; font-size:1.05rem; padding:0.2rem 0.4rem; }
