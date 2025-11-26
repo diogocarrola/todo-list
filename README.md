@@ -2,24 +2,23 @@
 
 ## The Odin Project - Todo List
 
-A clean, modular todo list app built with modern JavaScript and CSS. Organize your tasks into projects, set priorities and keep track of due dates, all with persistent local storage.
+A K.I.T.T. / Knight Rider inspired todo manager built with modern JavaScript and CSS. Tasks are organized into projects, with priorities, due dates and persistent local storage. The UI features a dynamic scanner bar, themed dashboard panels and compact mission-style todos.
 
 ### Features
 
-- **Project Organization:** Group todos into separate projects.
-- **Dynamic Todos:** Add, delete, and mark todos as complete.
-- **Priority & Due Dates:** Set priority levels and due dates for each todo.
-- **Persistent Storage:** All data is saved in your browser using localStorage.
-- **Visual Priority:** Todos are color-coded by priority.
-- **Modular Structure:** Logic and DOM code are separated for maintainability.
-- **Responsive Design:** Works on desktop and mobile.
-- **Edit Details:** Expand todos to view details (editing coming soon).
+- **Thematic K.I.T.T. UI:** Animated scanner, dashboard buttons and voice notification panel.
+- **Project Organization:** Group todos into separate projects and rename/delete projects.
+- **Compact Todos:** Each todo shows checkbox, title, two-line description, time remaining and action icons.
+- **Priority & Due Dates:** Priority badges and timeline indicators with visual urgency.
+- **Persistent Storage:** All data is saved locally in the browser using localStorage.
+- **Modular Structure:** Separated modules for projects, todos, storage, DOM rendering and KITT voice manager.
+- **Responsive Design:** Works on desktop and mobile with a responsive layout.
 
 ### How It Works
 
-- View all projects and their todos.
-- Add new projects and todos using the forms.
-- Click a todo's checkbox to mark it complete.
-- Click "Details" to view more info about a todo.
-- Delete todos and projects as needed.
-- All changes are saved automatically.
+- Use the left sidebar to switch between projects or add a new mission/project.
+- Add new todos with title, description, due date and priority using the Add Todo form.
+- The main panel shows mission stats and a compact list of todos; long lists are scrollable.
+- Toggle dashboard modes (Turbo, Surveillance, Auto) to change the theme and scanner behavior.
+- Click the pencil icon to edit a todo (modal) or the trash icon to delete it.
+- All changes persist automatically in your browser.
